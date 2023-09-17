@@ -1,12 +1,23 @@
-/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-control-regex */
-
-import { useNavigate, Form, useActionData, redirect } from "react-router-dom"
+/* eslint-disable react-refresh/only-export-components */
+import { Form, useNavigate, useLoaderData, redirect, useActionData } from "react-router-dom"
+import { obtenerClientes, actualizarCliente } from "../data/clientes"
 import Formulario from "../components/Formulario"
 import Error from "../components/Error"
-import { agregarCliente } from "../data/clientes"
 
-export async function action({request}) {
+export async function loader({params}){
+  const cliente =  await obtenerClientes(params.clienteId)
+
+  if(Object.values(cliente).length === 0){
+   throw new Response('',{
+      status: 404,
+      statusText: 'No hay resultado'
+   })
+  }
+  return cliente
+}
+export async function action({request,params}){
+
 
   const formData = await request.formData()
   const datos = Object.fromEntries(formData) 
@@ -28,22 +39,24 @@ export async function action({request}) {
   if(Object.keys(errores).length){
     return errores
   }
-  await agregarCliente(datos)
-
+  //actualizar el cliente
+  await actualizarCliente(params.clienteId, datos)
   return redirect('/')
+
 }
 
-const NuevoCliente = () => {
-  const errores = useActionData()
-  const navigate = useNavigate()
+const EditarCliente = () => {
+const navigate = useNavigate();
+const cliente = useLoaderData();
+const errores = useActionData();
 
   return (
-    <>
-      <h1 className="font-black text-4xl text-blue-900">Nuevos Clientes </h1>
-      <p className="mt-3">Llena todos los campos para registrar un nuevo cliente</p>
+<>
+      <h1 className="font-black text-4xl text-blue-900">Editar Cliente</h1>
+      <p className="mt-3">A continuacion podras modificar los datos de un cliente</p>
       <div className="justify-end">
         <button 
-          onClick={()=>navigate('/')}
+          onClick={() => navigate('/')}
           className="bg-blue-800 text-white px-3 py-1 font-bold uppercase"
         >
           Volver
@@ -51,22 +64,24 @@ const NuevoCliente = () => {
       </div>
       <div className="bg-white shadow rounded-md md:w-3/4 mx-auto px-5 py-10 mt-20">
         
-        {errores?.length && errores.map((error, i) => <Error key={i}>{error}</Error>)}
+      {errores?.length && errores.map((error, i) => <Error key={i}>{error}</Error>)}
         
         <Form
           method="post"
           noValidate
         >
-          <Formulario />
+          <Formulario 
+            cliente = {cliente}
+          />
           <input 
             type="submit" 
             className="mt-5 w-full bg-blue-800 p-3 uppercase font-bold text-white text-lg"
-            value= "Registrar cliente"
+            value= "Guardar cambios"
           />
         </Form>
       </div>
     </>
   )
 }
- 
-export default NuevoCliente
+
+export default EditarCliente

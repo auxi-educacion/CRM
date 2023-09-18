@@ -1,0 +1,41 @@
+{
+  "clientes": [
+    {
+      "nombre": "Karen",
+      "empresa": "Codigo Con Juan",
+      "email": "karen@juan.com",
+      "telefono": "138198313",
+      "notas": "Notas de Karen",
+      "id": 2
+    },
+    {
+      "email": "josue@juan.com",
+      "empresa": "Codigo Con Juan",
+      "id": 3,
+      "nombre": "Josue",
+      "telefono": 31983913
+    },
+    {
+      "email": "miguel@juan.com",
+      "empresa": "Codigo Con Juan",
+      "id": 4,
+      "nombre": "Miguel",
+      "telefono": 319381983
+    },
+    {
+      "email": "pedro@juan.com",
+      "empresa": "Codigo Con Juan",
+      "id": 5,
+      "nombre": "Pedro",
+      "telefono": 1398198938
+    },
+    {
+      "nombre": "juan",
+      "empresa": "codigo con juan",
+      "email": "juan@juan.com",
+      "telefono": "120312310",
+      "notas": "El cliente quiere un icomers",
+      "id": 6
+    }
+  ]
+}
